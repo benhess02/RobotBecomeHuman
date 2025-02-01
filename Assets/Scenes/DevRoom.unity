@@ -1120,8 +1120,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 8
   dashKey: 304
-  maxDashTime: 10
-  currentDashTime: 0
+  dashSpeed: 25
+  dashDuration: 10
+  dashCooldown: 500
 --- !u!4 &1010544889 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2074309497383403307, guid: b3d7384d37992254eb7b7f13dc01dd66, type: 3}

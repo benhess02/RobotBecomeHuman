@@ -1,46 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed;
+    public float speed = 8;
     Vector2 movement;
     InputAction moveAction;
     Rigidbody2D rb;
 
     public KeyCode dashKey;
-    public float maxDashTime = 10f;
-    public float currentDashTime;
+    public int dashSpeed = 25;
+    public float dashDuration = 10;
+    public int dashCooldown = 500;
+    float currentDashTime;
+    int dashDowntime = 500;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentDashTime = maxDashTime;
+        currentDashTime = dashDuration;
         moveAction = InputSystem.actions.FindAction("Move");
         rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
-    {   
-        if (Input.GetKeyDown(dashKey) && movement != Vector2.zero)
+    {
+        bool dashReady = (movement != Vector2.zero) && (dashDowntime == dashCooldown);
+
+        if (Input.GetKeyDown(dashKey) && dashReady) {
             currentDashTime = 0.0f;
-        
-        if (currentDashTime < maxDashTime) {
-            currentDashTime += 0.1f;
-            speed = 30;
-        } else {
-            movement = moveAction.ReadValue<Vector2>();
-            speed = 8;
+            dashDowntime = 0;
         }
 
-        rb.velocity = movement * speed;
-    }
+        if (currentDashTime < dashDuration) {
+            currentDashTime += 0.1f;
+            rb.velocity = movement * dashSpeed;
+        } else {
+            movement = moveAction.ReadValue<Vector2>();
+            rb.velocity = movement * speed;
+        }
 
-    private void Dash() {
-        
+        if (dashDowntime < dashCooldown)
+            dashDowntime++;
     }
 }
