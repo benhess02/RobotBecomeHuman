@@ -1,0 +1,9 @@
+"Choose one"
+    - "A" -> a
+    - "B" -> b
+
+a:
+"This is A!"
+
+b:
+"This is B!"
